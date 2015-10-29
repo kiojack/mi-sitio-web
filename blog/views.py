@@ -3,6 +3,8 @@ from django.utils import timezone
 from .models import Postear
 from django.shortcuts import render, get_object_or_404
 from .forms import PostForm
+from django.shortcuts import redirect
+
 
 def post_list(request):
      posts = Postear.objects.filter(fecha_publicacion__lte=timezone.now()).order_by('fecha_publicacion')
@@ -17,7 +19,7 @@ def post_new(request):
             form = PostForm(request.POST)
             if form.is_valid():
                 post = form.save(commit=False)
-                post.author = request.user
+                post.autor = request.user
                 post.save()
                 return redirect('blog.views.post_detail', pk=post.pk)
         else:
@@ -30,7 +32,7 @@ def post_edit(request, pk):
             form = PostForm(request.POST, instance=post)
             if form.is_valid():
                 post = form.save(commit=False)
-                post.author = request.user
+                post.autor = request.user
                 post.save()
                 return redirect('blog.views.post_detail', pk=post.pk)
         else:
